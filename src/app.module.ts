@@ -16,6 +16,7 @@ import { AccessKeyModule } from './access-keys/access-key.module';
       username: process.env.PG_USER,
       password: process.env.PG_PASSWORD,
       database: process.env.PG_DB,
+      "synchronize": true,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
     }),
     AccessKeyModule

@@ -12,6 +12,18 @@ export class AccessKeyService {
     private readonly redisService: RedisService,
   ) { }
 
+  async findAll(): Promise<AccessKey[]> {
+    return this.accessKeyRepository.find();
+  }
+
+  async findOne(id: number): Promise<AccessKey> {
+    const accessKey = await this.accessKeyRepository.findOne({ where: { id } });
+    if (!accessKey) {
+      return null;
+    }
+    return accessKey;
+  }
+
   async create(key: string, rateLimit: number, expiration: Date): Promise<AccessKey> {
     const accessKey = new AccessKey();
     accessKey.key = key;
@@ -24,7 +36,7 @@ export class AccessKeyService {
   }
 
   async update(id: number, rateLimit: number, expiration: Date): Promise<AccessKey> {
-    const accessKey = await this.accessKeyRepository.findOne({});
+    const accessKey = await this.accessKeyRepository.findOne({ where: { id } });
     if (!accessKey) {
       return null;
     }

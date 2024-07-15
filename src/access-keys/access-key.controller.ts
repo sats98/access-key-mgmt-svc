@@ -7,6 +7,16 @@ export class AccessKeyController {
   constructor(private readonly accessKeyService: AccessKeyService) {}
 
 
+  @Get()
+  findAll(): Promise<AccessKey[]> {
+    return this.accessKeyService.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string): Promise<AccessKey> {
+    return this.accessKeyService.findOne(Number(id));
+  }
+
   @Post()
   create(@Body() body: { key: string; rateLimit: number; expiration: Date }): Promise<AccessKey> {
     const { key, rateLimit, expiration } = body;
