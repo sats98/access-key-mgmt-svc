@@ -25,6 +25,8 @@ export class AccessKeyService {
   }
 
   async create(key: string, rateLimit: number, expiration: Date): Promise<AccessKey> {
+
+    //Also check if there is already a key with same name is available.
     const accessKey = new AccessKey();
     accessKey.key = key;
     accessKey.rateLimit = rateLimit;
@@ -50,7 +52,10 @@ export class AccessKeyService {
   }
 
   async remove(id: number): Promise<void> {
-    await this.accessKeyRepository.delete(id);
-    await this.redisService.publish('access_key_deleted', { id });
+    const accessKey = await this.accessKeyRepository.findOne({ where: { id } });
+    if (!accessKey) {
+      return null;
+    } await this.accessKeyRepository.delete(id);
+    await this.redisService.publish('access_key_deleted', accessKey);
   }
 }
